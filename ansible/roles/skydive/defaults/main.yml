@@ -1,0 +1,31 @@
+---
+project_name: "skydive"
+
+skydive_services:
+  skydive-analyzer:
+    container_name: skydive_analyzer
+    group: skydive-analyzer
+    enabled: true
+    image: "{{ skydive_image_full }}"
+    volumes:
+      - "{{ node_config_directory }}/skydive-analyzer/:{{ container_config_directory }}/:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "kolla_logs:/var/log/kolla/"
+  skydive-agent:
+    container_name: skydive_agent
+    group: skydive-agent
+    enabled: true
+    image: "{{ skydive_image_full }}"
+    volumes:
+      - "{{ node_config_directory }}/skydive-agent/:{{ container_config_directory }}/:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/var/run/openvswitch/db.sock:/var/run/openvswitch/db.sock"
+      - "kolla_logs:/var/log/kolla/"
+
+####################
+# Docker
+####################
+skydive_image: "{{ docker_registry ~ '/' if docker_registry else '' }}{{ docker_namespace }}/{{ kolla_base_distro }}-{{ kolla_install_type }}-skydive"
+skydive_tag: "{{ openstack_release }}"
+skydive_image_full: "{{ skydive_image }}:{{ skydive_tag }}"
+
