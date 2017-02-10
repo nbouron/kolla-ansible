@@ -1,0 +1,46 @@
+### Skydive agent config file
+
+auth:
+  type: keystone
+  analyzer_username: {{ openstack_auth['username'] }}
+  analyzer_password: {{ openstack_auth['password'] }}
+
+logging:
+  default: DEBUG
+  topology/probes: INFO
+  topology/graph: INFO
+
+openstack:
+  auth_url: {{ keystone_public_url }}/v3
+  username: {{ openstack_auth['username'] }}
+  password: {{ openstack_auth['password'] }}
+  tenant_name: {{ openstack_auth['project_name'] }}
+  region_name: RegionOne
+  domain_name: Default
+
+etcd:
+  servers:
+{% for host in groups['skydive-analyzer'] %}
+  - http://{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}:{{ skydive_analyzer_etcd_port }}
+{% endfor %}
+  port: {{ skydive_analyzer_etcd_port }}
+
+
+analyzers:
+{% for host in groups['skydive-analyzer'] %}
+  - {{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}:{{ skydive_analyzer_port }}
+{% endfor %}
+
+agent:
+  listen: {{ hostvars[inventory_hostname]['ansible_' + hostvars[inventory_hostname]['api_interface']]['ipv4']['address'] }}:{{ skydive_agents_port }}
+  flow:
+    probes:
+      - ovssflow
+      - gopacket
+  topology:
+    probes:
+      - netlink
+      - netns
+      - ovsdb
+      - neutron
+
