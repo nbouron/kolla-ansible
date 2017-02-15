@@ -1,0 +1,49 @@
+### Skydive agent config file
+
+# list of analyzers used by analyzers and agents
+analyzers:
+  - 192.168.50.10:8082
+
+agent:
+  # address and port for the agent API, Format: addr:port.
+  # Default addr is 127.0.0.1
+  listen: :8081
+
+  flow:
+    # Probes used to capture traffic.
+    probes:
+      # - ovssflow
+      # gopacket probe will use either pcap or afpacket according to the type of
+      # the capture. Default is afpacket.
+      - gopacket
+      # pcapsocket probe creates a TCP socket where PCAP traces can
+      # be written into
+      # - pcapsocket
+
+  topology:
+    # Probes used to capture topology informations like interfaces,
+    # bridges, namespaces, etc...
+    # Available: netlink, netns, ovsdb, docker, neutron, opencontrail
+    # Default: netlink, netns
+    probes:
+      - netlink
+      # - netns
+      # - ovsdb
+      # - docker
+      # - neutron
+      # - opencontrail
+
+logging:
+  default: INFO
+  topology/probes: INFO
+  topology/graph: INFO
+
+etcd:
+  # Embeded : if true, the analyzer start an embeded etcd server
+  embeded: true
+
+  # both the analyzers and the agents make use of etcd
+  # servers:
+  #    - http://127.0.0.1:2379
+
+  client_timeout: 100

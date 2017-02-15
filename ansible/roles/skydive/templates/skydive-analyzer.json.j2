@@ -1,0 +1,18 @@
+{
+    "command": "skydive agent --conf /etc/skydive/skydive.conf",
+    "config_files": [
+        {
+            "source": "{{ container_config_directory }}/skydive-angent.conf",
+            "dest": "/etc/skydive/skydive.conf",
+            "owner": "skydive",
+            "perm": "0600"
+        }
+    ],
+    "permissions": [
+        {
+            "path": "/var/log/kolla/skydive",
+            "owner": "skydive:skydive",
+            "recurse": true
+        }
+    ]
+}

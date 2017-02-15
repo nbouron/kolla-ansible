@@ -1,0 +1,53 @@
+### Skydive analyzer config file
+
+analyzer:
+  listen: 0.0.0.0:8082
+  flowtable_expire: 60
+  flowtable_update: 5
+  flowtable_agent_ratio: 0.5
+
+  # Flow storage engine
+  # Available: elasticsearch, orientdb
+  storage: elasticsearch
+
+  topology:
+    fabric:
+      - TOR1[Name=tor1] -> TOR1_PORT1[Name=port1, MTU=1500]
+      - TOR1[Name=tor1] -> TOR1_PORT2[Name=port2, MTU=1500]
+      - TOR1_PORT1 -> *[Type=host,Name=agent1]/eth1
+      - TOR1_PORT2 -> *[Type=host,Name=agent2]/eth1
+
+storage:
+  elasticsearch:
+    host: 127.0.0.1:9200
+    maxconns: 10
+    retry: 60
+
+graph:
+  # graph backend memory, elasticsearch, orientdb
+  backend: memory
+
+logging:
+  default: INFO
+  topology/probes: INFO
+  topology/graph: INFO
+
+auth:
+  # specify the type of authentication mechanism: noauth, basic, keystone (default: noauth)
+  type: noauth
+  # basic:
+    # file: /etc/skydive/htpasswd
+  # The 'analyzer_username' and 'analyzer_password' parameters are
+  # used by the agent to authenticate against the analyzer
+  # analyzer_username: admin
+  # analyzer_password: password
+
+etcd:
+  # Embeded : if true, the analyzer start an embeded etcd server
+  embeded: true
+
+  # both the analyzers and the agents make use of etcd
+  # servers:
+  #    - http://127.0.0.1:2379
+
+  client_timeout: 100
