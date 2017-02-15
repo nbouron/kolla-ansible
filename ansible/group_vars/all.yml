@@ -249,6 +249,10 @@ zun_api_port: "9512"
 
 ovsdb_port: "6640"
 
+skydive_analyzer_port: "8085"
+skydive_agents_port: "8090"
+
+
 public_protocol: "{{ 'https' if kolla_enable_tls_external | bool else 'http' }}"
 internal_protocol: "http"
 admin_protocol: "http"
@@ -362,6 +366,7 @@ enable_sahara: "no"
 enable_searchlight: "no"
 enable_senlin: "no"
 enable_solum: "no"
+enable_skydive: "yes"
 enable_swift: "no"
 enable_tacker: "no"
 enable_telegraf: "no"
@@ -454,6 +459,14 @@ ceilometer_event_type: "mongodb"
 # Valid options are [ simple_crypto, p11_crypto ]
 barbican_crypto_plugin: "simple_crypto"
 barbican_library_path: "/usr/lib/libCryptoki2_64.so"
+
+
+################################
+# Skydive
+###############################
+
+# skydive configuration
+
 
 ########################
 ### Panko options
