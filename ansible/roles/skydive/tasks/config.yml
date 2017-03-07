@@ -11,8 +11,8 @@
 
 - name: Copying over default config.json files
   template:
-    src: "{{ itme.key }}.json.j2"
-    dest: "{{ node_config_directory }}/{{ itme.key }}/config.json"
+    src: "{{ item.key }}.json.j2"
+    dest: "{{ node_config_directory }}/{{ item.key }}/config.json"
   register: skydive_config_jsons
   when:
     - inventory_hostname in groups[item.value.group]
@@ -24,12 +24,12 @@
 
 - name: Copying over skydive config file
   template:
-    src: "{{ itme.key }}.conf.j2"
-    dest: "{{ node_config_directory }}/{{ itme.key }}/skydive.conf"
+    src: "{{ item.key }}.conf.j2"
+    dest: "{{ node_config_directory }}/{{ item.key }}/skydive.conf"
   register: skydive_confs
   when:
     - item.value.enabled | bool
-    - inventory_hostname in groups[service.group]
+    - inventory_hostname in groups[item.value.group]
   with_dict: "{{ skydive_services }}"
   notify:
     - Restart skydive-analyzer container
