@@ -1,53 +1,45 @@
 ### Skydive analyzer config file
 
+auth:
+  type: noauth
+
+logging:
+  default: DEBUG
+  #topology/probes: INFO
+  #topology/graph: INFO
+
+openstack:
+  #auth_url: {{ keystone_admin_url }}
+  auth_url: http://172.28.128.31:35357/v3
+  username: {{ openstack_auth['username'] }}
+  password: {{ openstack_auth['password'] }}
+  tenant_name: {{ openstack_auth['project_name'] }}
+  region_name: RegionOne
+  domain_name: {{ openstack_auth['domain_name'] }}
+
+etcd:
+  embeded: true
+  client_timeout: 100
+
 analyzer:
-  listen: 0.0.0.0:8082
+  listen: {{ hostvars[inventory_hostname]['ansible_' + hostvars[inventory_hostname]['api_interface']]['ipv4']['address'] }}:{{ skydive_analyzer_port }}
   flowtable_expire: 60
   flowtable_update: 5
   flowtable_agent_ratio: 0.5
-
-  # Flow storage engine
-  # Available: elasticsearch, orientdb
   storage: elasticsearch
-
   topology:
     fabric:
       - TOR1[Name=tor1] -> TOR1_PORT1[Name=port1, MTU=1500]
-      - TOR1[Name=tor1] -> TOR1_PORT2[Name=port2, MTU=1500]
-      - TOR1_PORT1 -> *[Type=host,Name=agent1]/eth1
-      - TOR1_PORT2 -> *[Type=host,Name=agent2]/eth1
+      - TOR1_PORT1 -> *[Type=host,Name={{ ansible_hostname }}]/eth1
 
 storage:
   elasticsearch:
-    host: 127.0.0.1:9200
+    #host: {{ elasticsearch_address }}:{{ elasticsearch_port }}
+    host: {{ hostvars[inventory_hostname]['ansible_' + hostvars[inventory_hostname]['api_interface']]['ipv4']['address'] }}:{{ elasticsearch_port }}
     maxconns: 10
     retry: 60
 
 graph:
-  # graph backend memory, elasticsearch, orientdb
-  backend: memory
-
-logging:
-  default: INFO
-  topology/probes: INFO
-  topology/graph: INFO
-
-auth:
-  # specify the type of authentication mechanism: noauth, basic, keystone (default: noauth)
-  type: noauth
-  # basic:
-    # file: /etc/skydive/htpasswd
-  # The 'analyzer_username' and 'analyzer_password' parameters are
-  # used by the agent to authenticate against the analyzer
-  # analyzer_username: admin
-  # analyzer_password: password
-
-etcd:
-  # Embeded : if true, the analyzer start an embeded etcd server
   embeded: true
-
-  # both the analyzers and the agents make use of etcd
-  # servers:
-  #    - http://127.0.0.1:2379
-
   client_timeout: 100
+

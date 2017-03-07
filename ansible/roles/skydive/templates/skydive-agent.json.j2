@@ -1,8 +1,8 @@
 {
-    "command": "skydive analyzer --conf /etc/skydive/skydive.conf",
+    "command": "skydive agent --conf /etc/skydive/skydive.conf",
     "config_files": [
         {
-            "source": "{{ container_config_directory }}/skydive-analyzer.conf",
+            "source": "{{ container_config_directory }}/skydive.conf",
             "dest": "/etc/skydive/skydive.conf",
             "owner": "skydive",
             "perm": "0600"

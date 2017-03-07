@@ -1,49 +1,39 @@
 ### Skydive agent config file
 
-# list of analyzers used by analyzers and agents
-analyzers:
-  - 192.168.50.10:8082
-
-agent:
-  # address and port for the agent API, Format: addr:port.
-  # Default addr is 127.0.0.1
-  listen: :8081
-
-  flow:
-    # Probes used to capture traffic.
-    probes:
-      # - ovssflow
-      # gopacket probe will use either pcap or afpacket according to the type of
-      # the capture. Default is afpacket.
-      - gopacket
-      # pcapsocket probe creates a TCP socket where PCAP traces can
-      # be written into
-      # - pcapsocket
-
-  topology:
-    # Probes used to capture topology informations like interfaces,
-    # bridges, namespaces, etc...
-    # Available: netlink, netns, ovsdb, docker, neutron, opencontrail
-    # Default: netlink, netns
-    probes:
-      - netlink
-      # - netns
-      # - ovsdb
-      # - docker
-      # - neutron
-      # - opencontrail
+auth:
+  type: noauth
 
 logging:
-  default: INFO
-  topology/probes: INFO
-  topology/graph: INFO
+  default: DEBUG
+  #topology/probes: INFO
+  #topology/graph: INFO
 
-etcd:
-  # Embeded : if true, the analyzer start an embeded etcd server
-  embeded: true
+openstack:
+  #auth_url: {{ keystone_admin_url }}
+  auth_url: http://172.28.128.31:35357/v3
+  username: {{ openstack_auth['username'] }}
+  password: {{ openstack_auth['password'] }}
+  tenant_name: {{ openstack_auth['project_name'] }}
+  region_name: RegionOne
+  domain_name: {{ openstack_auth['domain_name'] }}
 
-  # both the analyzers and the agents make use of etcd
-  # servers:
-  #    - http://127.0.0.1:2379
+analyzers:
+{% for host in groups['skydive-analyzer'] %}
+  - {{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}:{{ skydive_analyzer_port }}
+{% endfor %}
 
-  client_timeout: 100
+agent:
+  listen: {{ hostvars[inventory_hostname]['ansible_' + hostvars[inventory_hostname]['api_interface']]['ipv4']['address'] }}:{{ skydive_agents_port }}
+  analyzer_username: {{ openstack_auth['username'] }}
+  analyzer_password: {{ openstack_auth['password'] }}
+  flow:
+    probes:
+      - ovssflow
+      - gopacket
+  topology:
+    probes:
+      - netlink
+      - netns
+      - ovsdb
+      - neutron
+
