@@ -19,6 +19,7 @@ skydive_services:
     volumes:
       - "{{ node_config_directory }}/skydive-agent/:{{ container_config_directory }}/:ro"
       - "/etc/localtime:/etc/localtime:ro"
+      - "/var/run/openvswitch/db.sock:/var/run/openvswitch/db.sock"
       - "kolla_logs:/var/log/kolla/"
 
 ####################
