@@ -5,17 +5,17 @@ auth:
 
 logging:
   default: DEBUG
-  #topology/probes: INFO
-  #topology/graph: INFO
+  topology/probes: INFO
+  topology/graph: INFO
 
 openstack:
-  #auth_url: {{ keystone_admin_url }}
-  auth_url: http://172.28.128.31:35357/v3
+  auth_url: {{ keystone_admin_url }}
   username: {{ openstack_auth['username'] }}
   password: {{ openstack_auth['password'] }}
   tenant_name: {{ openstack_auth['project_name'] }}
   region_name: RegionOne
   domain_name: {{ openstack_auth['domain_name'] }}
+  endpoint_type: public
 
 analyzers:
 {% for host in groups['skydive-analyzer'] %}

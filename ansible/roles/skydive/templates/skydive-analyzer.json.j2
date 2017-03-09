@@ -1,5 +1,5 @@
 {
-    "command": "skydive analyzer --conf /etc/skydive/skydive.conf",
+    "command": "skydive analyzer --conf /etc/skydive/skydive.conf --listen={{ hostvars[inventory_hostname]['ansible_' + hostvars[inventory_hostname]['api_interface']]['ipv4']['address'] }}:{{ skydive_analyzer_port }}",
     "config_files": [
         {
             "source": "{{ container_config_directory }}/skydive.conf",

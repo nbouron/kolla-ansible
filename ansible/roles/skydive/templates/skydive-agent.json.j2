@@ -1,5 +1,5 @@
 {
-    "command": "skydive agent --conf /etc/skydive/skydive.conf",
+    "command": "skydive agent --conf /etc/skydive/skydive.conf --listen=0.0.0.0:{{ skydive_agents_port }}",
     "config_files": [
         {
             "source": "{{ container_config_directory }}/skydive.conf",
