@@ -1,7 +1,7 @@
 ### Skydive analyzer config file
 
 auth:
-  type: noauth
+  type: keystone
 
 logging:
   default: DEBUG
@@ -9,13 +9,12 @@ logging:
   topology/graph: INFO
 
 openstack:
-  auth_url: {{ keystone_admin_url }}
+  auth_url: {{ keystone_public_url }}
   username: {{ openstack_auth['username'] }}
   password: {{ openstack_auth['password'] }}
   tenant_name: {{ openstack_auth['project_name'] }}
   region_name: RegionOne
-  domain_name: {{ openstack_auth['domain_name'] }}
-  endpoint_type: public
+  domain_name: Default
 
 etcd:
   embeded: true
