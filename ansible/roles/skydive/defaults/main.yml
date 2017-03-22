@@ -6,7 +6,7 @@ skydive_services:
     container_name: skydive_analyzer
     group: skydive-analyzer
     enabled: true
-    image: "{{ skydive_analyzer_image_full }}"
+    image: "{{ skydive_image_full }}"
     volumes:
       - "{{ node_config_directory }}/skydive-analyzer/:{{ container_config_directory }}/:ro"
       - "/etc/localtime:/etc/localtime:ro"
@@ -15,7 +15,7 @@ skydive_services:
     container_name: skydive_agent
     group: skydive-agent
     enabled: true
-    image: "{{ skydive_agent_image_full }}"
+    image: "{{ skydive_image_full }}"
     volumes:
       - "{{ node_config_directory }}/skydive-agent/:{{ container_config_directory }}/:ro"
       - "/etc/localtime:/etc/localtime:ro"
@@ -25,11 +25,7 @@ skydive_services:
 ####################
 # Docker
 ####################
-skydive_analyzer_image: "{{ docker_registry ~ '/' if docker_registry else '' }}{{ docker_namespace }}/{{ kolla_base_distro }}-{{ kolla_install_type }}-skydive-analyzer"
-skydive_analyzer_tag: "{{ openstack_release }}"
-skydive_analyzer_image_full: "{{ skydive_analyzer_image }}:{{ skydive_analyzer_tag }}"
-
-skydive_agent_image: "{{ docker_registry ~ '/' if docker_registry else '' }}{{ docker_namespace }}/{{ kolla_base_distro }}-{{ kolla_install_type }}-skydive-agent"
-skydive_agent_tag: "{{ openstack_release }}"
-skydive_agent_image_full: "{{ skydive_agent_image }}:{{ skydive_agent_tag }}"
+skydive_image: "{{ docker_registry ~ '/' if docker_registry else '' }}{{ docker_namespace }}/{{ kolla_base_distro }}-{{ kolla_install_type }}-skydive"
+skydive_tag: "{{ openstack_release }}"
+skydive_image_full: "{{ skydive_image }}:{{ skydive_tag }}"
 
