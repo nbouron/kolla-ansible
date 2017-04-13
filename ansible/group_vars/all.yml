@@ -461,13 +461,6 @@ barbican_crypto_plugin: "simple_crypto"
 barbican_library_path: "/usr/lib/libCryptoki2_64.so"
 
 
-################################
-# Skydive
-###############################
-
-# skydive configuration
-
-
 ########################
 ### Panko options
 ########################
