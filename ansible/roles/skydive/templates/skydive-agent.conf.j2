@@ -11,12 +11,20 @@ logging:
   topology/graph: INFO
 
 openstack:
-  auth_url: {{ keystone_public_url }}
+  auth_url: {{ keystone_public_url }}/v3
   username: {{ openstack_auth['username'] }}
   password: {{ openstack_auth['password'] }}
   tenant_name: {{ openstack_auth['project_name'] }}
   region_name: RegionOne
   domain_name: Default
+
+etcd:
+  servers:
+{% for host in groups['skydive-analyzer'] %}
+  - http://{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}:{{ skydive_analyzer_etcd_port }}
+{% endfor %}
+  port: {{ skydive_analyzer_etcd_port }}
+
 
 analyzers:
 {% for host in groups['skydive-analyzer'] %}

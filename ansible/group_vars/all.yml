@@ -250,6 +250,7 @@ zun_api_port: "9512"
 ovsdb_port: "6640"
 
 skydive_analyzer_port: "8085"
+skydive_analyzer_etcd_port: "2378"
 skydive_agents_port: "8090"
 
 
