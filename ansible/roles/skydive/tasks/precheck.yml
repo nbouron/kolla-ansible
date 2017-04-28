@@ -10,7 +10,7 @@
   vars:
     skydive_analyzer: "{{ skydive_services['skydive-analyzer'] }}"
   wait_for:
-    host: "{{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}"
+    host: "{{ api_interface_address }}"
     port: "{{ skydive_analyzer_port }}"
     connect_timeout: 1
     state: stopped
@@ -23,7 +23,7 @@
   vars:
     skydive_agent: "{{ skydive_services['skydive-agent'] }}"
   wait_for:
-    host: "{{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}"
+    host: "{{ api_interface_address }}"
     port: "{{ skydive_agents_port }}"
     connect_timeout: 1
     state: stopped
